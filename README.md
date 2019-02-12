@@ -1,5 +1,5 @@
 # hl-csa-raptor
-Hub labeling based version of CSA and RAPTOR supporting unrestricted walking
+Hub labeling based versions of CSA and RAPTOR supporting unrestricted walking
 
 An implementation in C++ of HLCSA and HLRaptor which are variants of Connection Scan Algorithm (CSA) and RAPTOR supporting unrestricted walking through the use of a hub labeling of the footpath graph.
 
