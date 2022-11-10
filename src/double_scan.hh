@@ -49,7 +49,7 @@ private:
     std::vector<C> best_cost;
     std::vector<E> parent;
     std::vector<C> min_cost;
-    std::vector<E> next_in_trip; // next temp_edge in the trip
+    // TODO: std::vector<E> next_in_trip; // next temp_edge in the trip
 
     struct e_dep_indexes {
         E first, last; // first/last edge from a station
