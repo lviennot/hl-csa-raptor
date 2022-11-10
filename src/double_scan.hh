@@ -49,7 +49,7 @@ private:
     std::vector<C> best_cost;
     std::vector<E> parent;
     std::vector<C> min_cost;
-    // TODO: std::vector<E> next_in_trip; // next temp_edge in the trip
+    // TODO: std::vector<E> prev_in_trip; // next temp_edge in the trip
 
     struct e_dep_indexes {
         E first, last; // first/last edge from a station
@@ -134,6 +134,7 @@ public:
 
 
     T earliest_arrival_time(const ST src, const ST dst, const T t_dep,
+                            const T min_waiting_time,
                             const T max_waiting_time) {
         assert(0 <= t_dep && t_dep <= 3600*48);
         assert(max_waiting_time > 0);
