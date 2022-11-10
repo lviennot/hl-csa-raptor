@@ -103,7 +103,7 @@ int main (int argc, char **argv) {
 
     // --------------- earliest arrival time through CSA and DS ---------
     double_scan<cost_eat> ds(ttbl);
-    main_log.cerr(t) << "raptor initialized\n";
+    main_log.cerr(t) << "double_scan initialized\n";
     t = main_log.lap();
 
     connection_scan csa(ttbl);

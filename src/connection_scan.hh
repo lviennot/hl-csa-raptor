@@ -33,7 +33,7 @@ private:
         ST from, to;
         T dep, arr;
         int index;
-        connection(TR tr, S u, S v, T d, T a, int i)
+        connection(TR tr, ST u, ST v, T d, T a, int i)
             : trip(tr), from(u), to(v), dep(d), arr(a), index(i) {}
     };
 
@@ -98,7 +98,7 @@ public:
         }
 
         std::sort(conn.begin(), conn.end(),
-                  [&tt](const connection &c, const connection &d) {
+                  [](const connection &c, const connection &d) {
                       if (c.dep == d.dep) {
                           if (c.arr == d.arr) {
                               // Be careful to 0 delay connections:
