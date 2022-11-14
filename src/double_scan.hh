@@ -25,8 +25,26 @@ struct temp_edge {
 };
 
 
+struct cost_empty { // EAT queries do not use costs
 
-template<class C> // cost type, must override < and + operators, and have a constructor from a temp_edge
+    cost_empty() {
+    }
+    
+    cost_empty(const temp_edge &edg) {
+    }
+    
+    friend bool operator<(const cost_empty &e, const cost_empty &f) {
+        return false;
+    }
+    
+    friend cost_empty operator+(cost_empty e, cost_empty f) {
+        return e;
+    }
+};
+
+
+
+template<class C = cost_empty> // cost type, must override < and + operators, and have a constructor from a temp_edge as well as a default constructor
 
 class double_scan {
 
@@ -53,7 +71,7 @@ private:
 
     struct e_dep_indexes {
         E first, last; // first/last edge from a station
-        E left, right; // indexes of edges from a station currently reachable
+        E left, right; // a suitable interval of edges from a station v that are reachable from the last scanned edge arriving at v
     };  
     std::vector<e_dep_indexes> st_indexes; // Indexes of edges from a given station in e_dep
 
@@ -147,15 +165,35 @@ public:
             const temp_edge &e = e_dep[i];
         }
     }
+
+    C get_best_cost(E i) {
+        assert(parent[i] != not_a_temp_edge);
+        return best_cost[i];
+    }
+
+    C has_best_cost(E i) {
+        return parent[i] != not_a_temp_edge;
+    }
 };
 
 
 // Standard costs:
     
-struct cost_eat {
+struct cost_eat { // earliest arrival time
 
+private:
+    
     T arr;
 
+public:
+
+    typedef T cost; // Intended cost
+
+    cost intended_cost(const temp_edge &last_edge) {
+        assert(last_edge.arr == arr);
+        return arr;
+    }
+    
     cost_eat() : arr(std::numeric_limits<T>::max()) {
     }
     
@@ -168,5 +206,34 @@ struct cost_eat {
     
     friend cost_eat operator+(cost_eat e, cost_eat f) {
         return f;
+    }
+};
+
+struct cost_dur { // duration
+
+private:
+    
+    T dep;
+
+public:
+
+    typedef T cost; // Intended cost
+
+    cost intended_cost(const temp_edge &last_edge) {
+        return last_edge.arr - dep;
+    }
+    
+    cost_dur() : dep(std::numeric_limits<T>::min()) {
+    }
+    
+    cost_dur(const temp_edge &edg) : dep(edg.dep) {
+    }
+    
+    friend bool operator<(const cost_dur &e, const cost_dur &f) {
+        return e.dep > f.dep; // later departure leads to shorter duration (for same arrival time)
+    }
+    
+    friend cost_dur operator+(cost_dur e, cost_dur f) {
+        return e;
     }
 };
